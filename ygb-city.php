@@ -144,7 +144,7 @@ function ygb_city_activate() {
     flush_rewrite_rules();
     
     // Registrar log de activación
-    if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+    if (defined('WP_DEBUG') && WP_DEBUG) {
         error_log('YGB City Shipping: Plugin activado versión ' . YGB_CITY_VERSION);
     }
 }
@@ -167,7 +167,7 @@ function ygb_city_deactivate() {
     flush_rewrite_rules();
     
     // Registrar log de desactivación (sin eliminar datos)
-    if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+    if (defined('WP_DEBUG') && WP_DEBUG) {
         error_log('YGB City Shipping: Plugin desactivado - Los datos permanecen intactos');
     }
 }
