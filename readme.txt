@@ -3,7 +3,7 @@ Contributors: ygb
 Tags: woocommerce, shipping, cities, provinces, delivery, checkout, shipping-cost
 Requires at least: 5.8
 Tested up to: 7.0
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -69,6 +69,15 @@ Configura tus provincias y municipios
 
 == Changelog ==
 
+= 2.6.0 =
+Correcciones críticas de seguridad post-auditoría (08/09/2026):
+* ELIMINADA exposición de shipping_cost en frontend (atributo data-cost en checkout.js)
+* CORREGIDA vulnerabilidad SQL en cleanup de logs (ahora usa $wpdb->prepare)
+* MEJORADA validación MIME en uploads CSV (verificación estricta de text/csv y application/vnd.ms-excel)
+* REDUCIDOS mensajes de error detallados en producción (solo mostrar errores genéricos)
+* Los costos ahora se obtienen exclusivamente vía AJAX autenticado
+* Compatibilidad enterprise reforzada
+
 = 2.5.0 =
 Mejora completa de la limpieza de datos: ahora usa DELETE si TRUNCATE falla.
 Manejo robusto de duplicados en importación (sin sobrescribir ya no genera errores falsos).
@@ -108,6 +117,9 @@ Añadido wp_unslash antes de sanitizaciones.
 Versión inicial con seguridad mejorada.
 
 == Upgrade Notice ==
+
+= 2.6.0 =
+Actualización CRÍTICA de seguridad recomendada para todos los usuarios. Corrige exposición de costos en frontend y vulnerabilidad SQL en logs.
 
 = 2.5.0 =
 Actualización crítica que soluciona problemas de importación con duplicados y limpieza de datos. Recomendada para todos los usuarios.

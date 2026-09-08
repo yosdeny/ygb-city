@@ -3,7 +3,7 @@
  * Plugin Name: YGB City Shipping
  * Plugin URI: https://tusitio.com
  * Description: Sistema de envío por provincia y municipio con costos personalizados
- * Version: 2.5.0
+ * Version: 2.6.0
  * Author: YGB
  * Author URI: https://tusitio.com
  * License: GPL v2 or later
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes de seguridad
-define('YGB_CITY_VERSION', '2.5.0');
+define('YGB_CITY_VERSION', '2.6.0');
 define('YGB_CITY_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('YGB_CITY_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('YGB_CITY_FILE', __FILE__);
