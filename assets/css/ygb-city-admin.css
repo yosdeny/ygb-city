@@ -1,0 +1,121 @@
+/**
+ * YGB City Admin Styles - Versión 2.4.0
+ */
+
+.ygb-city-admin {
+    margin: 20px;
+}
+
+.ygb-city-admin h1 {
+    margin-bottom: 20px;
+    font-size: 23px;
+    font-weight: 400;
+}
+
+.ygb-city-admin .nav-tab-wrapper {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #c3c4c7;
+}
+
+.ygb-city-admin .nav-tab {
+    float: left;
+    margin-right: 5px;
+}
+
+.ygb-city-admin .tab-content {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #c3c4c7;
+    border-top: none;
+    display: none;
+}
+
+.ygb-city-admin .tab-content.active {
+    display: block;
+}
+
+.ygb-city-admin .form-table th {
+    width: 200px;
+    padding: 15px 10px 15px 0;
+}
+
+.ygb-city-admin .form-table td {
+    padding: 15px 10px;
+}
+
+.ygb-city-admin input[type="text"],
+.ygb-city-admin input[type="number"],
+.ygb-city-admin select {
+    max-width: 100%;
+}
+
+.ygb-city-admin .description {
+    color: #666;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.ygb-city-admin .wp-list-table {
+    margin-top: 20px;
+}
+
+.ygb-city-admin .shipping-cost {
+    width: 100px;
+    text-align: right;
+}
+
+/* ✅ Nueva clase para feedback visual de actualización exitosa */
+.ygb-city-admin .shipping-cost.ygb-update-success {
+    background-color: #d4edda;
+    transition: background-color 0.3s ease;
+}
+
+.ygb-city-admin .status-active {
+    color: #46b450;
+    font-weight: bold;
+}
+
+.ygb-city-admin .button-small {
+    margin-right: 5px;
+}
+
+/* Estilos para datos del pedido en admin */
+.ygb-city-order-data {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.ygb-city-order-data h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ygb-city-order-data p {
+    margin: 5px 0;
+}
+
+/* Estilos para detalles del pedido en frontend */
+.ygb-shipping-details {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f8f8;
+    border-left: 4px solid #4caf50;
+}
+
+.ygb-shipping-details h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+.ygb-shipping-details p {
+    margin: 5px 0;
+}
+
+@media (max-width: 782px) {
+    .ygb-city-admin .form-table th {
+        width: auto;
+        padding: 10px 0;
+    }
+}
