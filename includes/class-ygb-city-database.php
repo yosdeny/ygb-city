@@ -109,14 +109,17 @@ class YGB_City_Database {
         );
         
         $wpdb->query(
-            "DELETE FROM {$table_logs} 
-             WHERE id NOT IN (
-                 SELECT id FROM (
-                     SELECT id FROM {$table_logs} 
-                     ORDER BY created_at DESC 
-                     LIMIT 1000
-                 ) AS t
-             )"
+            $wpdb->prepare(
+                "DELETE FROM {$table_logs} 
+                 WHERE id NOT IN (
+                     SELECT id FROM (
+                         SELECT id FROM {$table_logs} 
+                         ORDER BY created_at DESC 
+                         LIMIT %d
+                     ) AS t
+                 )",
+                1000
+            )
         );
         
         if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
@@ -286,10 +289,14 @@ class YGB_City_Database {
         if ($result) {
             $insert_id = intval($wpdb->insert_id);
             self::log_activity("Provincia añadida: {$name} ({$code}) con ID: {$insert_id}", 'admin');
-            error_log("YGB City add_province: Insertada provincia '{$name}' con ID {$insert_id}");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("YGB City add_province: Insertada provincia '{$name}' con ID {$insert_id}");
+            }
             return $insert_id;
         }
-        error_log("YGB City add_province ERROR: " . $wpdb->last_error);
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("YGB City add_province ERROR: " . $wpdb->last_error);
+        }
         return false;
     }
     
@@ -305,7 +312,9 @@ class YGB_City_Database {
         $shipping_cost = floatval($shipping_cost);
         
         if ($province_id <= 0 || empty($name)) {
-            error_log("YGB City add_city: province_id inválido ({$province_id}) o nombre vacío");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("YGB City add_city: province_id inválido ({$province_id}) o nombre vacío");
+            }
             return false;
         }
         if (strlen($name) > 100) {
@@ -352,7 +361,9 @@ class YGB_City_Database {
                 }
             }
             // Log del error real
-            error_log("YGB City add_city ERROR: " . $wpdb->last_error . " | Datos: province_id={$province_id}, name='{$name}', cost={$shipping_cost}");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("YGB City add_city ERROR: " . $wpdb->last_error . " | Datos: province_id={$province_id}, name='{$name}', cost={$shipping_cost}");
+            }
             self::log_activity("Error al insertar municipio '{$name}': " . $wpdb->last_error, 'error');
             return false;
         }
@@ -632,7 +643,9 @@ class YGB_City_Database {
                     $errors++;
                     $error_msg = "Línea {$line_number}: Error al importar el municipio '{$city_name}'";
                     $errors_list[] = $error_msg;
-                    error_log("YGB City import falló fila {$line_number}: " . $wpdb->last_error . " | Datos: province_code='{$province_code}', city='{$city_name}', cost={$shipping_cost}");
+                    if (defined('WP_DEBUG') && WP_DEBUG) {
+                        error_log("YGB City import falló fila {$line_number}: " . $wpdb->last_error . " | Datos: province_code='{$province_code}', city='{$city_name}', cost={$shipping_cost}");
+                    }
                 }
             }
 
@@ -681,7 +694,9 @@ class YGB_City_Database {
             // Si no existe, crearla
             $province_id = self::add_province($province_name, $province_code);
             if (!$province_id) {
-                error_log("YGB City import_single_row: No se pudo crear la provincia '{$province_name}'");
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log("YGB City import_single_row: No se pudo crear la provincia '{$province_name}'");
+                }
                 return false;
             }
             // ✅ Verificar que la provincia realmente se creó y obtener su ID
@@ -692,19 +707,27 @@ class YGB_City_Database {
                 )
             );
             if (!$verify) {
-                error_log("YGB City import_single_row: La provincia se creó pero no se encuentra en la BD");
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log("YGB City import_single_row: La provincia se creó pero no se encuentra en la BD");
+                }
                 return false;
             }
             $province_id = intval($verify);
-            error_log("YGB City import_single_row: Provincia creada con ID {$province_id} para '{$province_name}'");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("YGB City import_single_row: Provincia creada con ID {$province_id} para '{$province_name}'");
+            }
         } else {
             $province_id = intval($province->id);
-            error_log("YGB City import_single_row: Provincia existente con ID {$province_id} para '{$province_name}'");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("YGB City import_single_row: Provincia existente con ID {$province_id} para '{$province_name}'");
+            }
         }
         
         // Verificar que province_id es válido
         if ($province_id <= 0) {
-            error_log("YGB City import_single_row: province_id inválido ({$province_id}) para '{$city_name}'");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("YGB City import_single_row: province_id inválido ({$province_id}) para '{$city_name}'");
+            }
             return false;
         }
         
@@ -727,7 +750,9 @@ class YGB_City_Database {
         
         $city_id = self::add_city($province_id, $city_name, $shipping_cost);
         if ($city_id === false) {
-            error_log("YGB City import_single_row: Error al insertar '{$city_name}' con province_id {$province_id}");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("YGB City import_single_row: Error al insertar '{$city_name}' con province_id {$province_id}");
+            }
         }
         return $city_id !== false ? $city_id : false;
     }
@@ -759,7 +784,9 @@ class YGB_City_Database {
                 $result = $wpdb->query("DELETE FROM {$table}");
                 if ($result === false) {
                     $all_cleared = false;
-                    error_log("YGB City: No se pudo limpiar la tabla {$table}");
+                    if (defined('WP_DEBUG') && WP_DEBUG) {
+                        error_log("YGB City: No se pudo limpiar la tabla {$table}");
+                    }
                 } else {
                     $wpdb->query("ALTER TABLE {$table} AUTO_INCREMENT = 1");
                 }

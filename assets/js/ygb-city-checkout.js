@@ -55,7 +55,7 @@ jQuery(document).ready(function($) {
                 if (province && province.cities && province.cities.length > 0) {
                     $.each(province.cities, function(index, city) {
                         $citySelect.append(
-                            '<option value="' + escapeHtml(city.id) + '" data-cost="' + escapeHtml(city.shipping_cost) + '">' + 
+                            '<option value="' + escapeHtml(city.id) + '">' + 
                             escapeHtml(city.name) + 
                             '</option>'
                         );
@@ -80,17 +80,7 @@ jQuery(document).ready(function($) {
             var $select = $(this);
             
             if (cityId) {
-                var selectedOption = $select.find('option:selected');
-                var cost = selectedOption.data('cost');
-                
-                if (cost !== undefined && cost > 0) {
-                    var costFormatted = new Intl.NumberFormat('es-ES', {
-                        style: 'currency',
-                        currency: 'EUR'
-                    }).format(cost);
-                    console.log('Costo seleccionado:', costFormatted);
-                }
-                
+                // El costo se obtiene exclusivamente vía AJAX por seguridad
                 $.ajax({
                     url: ygb_frontend.ajax_url,
                     type: 'POST',

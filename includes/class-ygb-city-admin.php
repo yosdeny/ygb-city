@@ -272,8 +272,9 @@ class YGB_City_Admin {
         
         $upload_overrides = array(
             'test_form' => false,
-            'mimes' => array('csv' => 'text/csv'),
-            'max_size' => $this->max_file_size
+            'mimes' => array('csv' => 'text/csv', 'text/plain' => 'text/plain'),
+            'max_size' => $this->max_file_size,
+            'test_type' => true
         );
         
         $uploaded_file = wp_handle_upload($_FILES['import_file'], $upload_overrides);
@@ -284,6 +285,23 @@ class YGB_City_Admin {
                 'tab' => 'import-export',
                 'import-result' => 'error',
                 'error' => 'upload'
+            ), admin_url('admin.php')));
+            exit;
+        }
+        
+        // Validación adicional: verificar que el archivo sea realmente CSV
+        $file_info = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type = finfo_file($file_info, $uploaded_file['file']);
+        finfo_close($file_info);
+        
+        $allowed_mime_types = array('text/csv', 'text/plain', 'application/vnd.ms-excel');
+        if (!in_array($mime_type, $allowed_mime_types, true)) {
+            wp_delete_file($uploaded_file['file']);
+            wp_safe_redirect(add_query_arg(array(
+                'page' => 'ygb-city',
+                'tab' => 'import-export',
+                'import-result' => 'error',
+                'error' => 'invalid-mime'
             ), admin_url('admin.php')));
             exit;
         }
