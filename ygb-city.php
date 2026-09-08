@@ -1,17 +1,19 @@
 <?php
 /**
  * Plugin Name: YGB City Shipping
- * Plugin URI: https://tusitio.com
+ * Plugin URI: https://github.com/yosdeny
  * Description: Sistema de envío por provincia y municipio con costos personalizados
  * Version: 2.6.0
  * Author: YGB
- * Author URI: https://tusitio.com
- * License: GPL v2 or later
+ * Author URI: https://github.com/yosdeny
+ * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: ygb-city
  * Domain Path: /languages
  * Requires at least: 7.0
+ * Tested up to: 7.1
  * Requires PHP: 8.0
+ * Tested PHP: 8.2
  * WC requires at least: 5.0
  * WC tested up to: 8.5
  */
