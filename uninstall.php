@@ -38,7 +38,7 @@ $tables = array(
 );
 
 foreach ($tables as $table) {
-    $wpdb->query("DROP TABLE IF EXISTS {$table}");
+    $wpdb->query($wpdb->prepare('DROP TABLE IF EXISTS %i', $table));
 }
 
 // Eliminar opciones del plugin

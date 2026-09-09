@@ -89,7 +89,7 @@ class YGB_City_Database {
     public static function log_activity($message, $type = 'info') {
         global $wpdb;
         $table_logs = $wpdb->prefix . 'ygb_activity_logs';
-        if ($wpdb->get_var("SHOW TABLES LIKE '{$table_logs}'") !== $table_logs) {
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table_logs)) !== $table_logs) {
             self::create_logs_table();
         }
         
@@ -414,9 +414,9 @@ class YGB_City_Database {
         return array(
             'total_provinces' => intval($wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table_provinces} WHERE active = %d", 1))),
             'total_cities' => intval($wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table_cities} WHERE active = %d", 1))),
-            'avg_shipping_cost' => floatval($wpdb->get_var("SELECT AVG(shipping_cost) FROM {$table_cities} WHERE active = 1")),
-            'min_shipping_cost' => floatval($wpdb->get_var("SELECT MIN(shipping_cost) FROM {$table_cities} WHERE active = 1")),
-            'max_shipping_cost' => floatval($wpdb->get_var("SELECT MAX(shipping_cost) FROM {$table_cities} WHERE active = 1"))
+            'avg_shipping_cost' => floatval($wpdb->get_var($wpdb->prepare("SELECT AVG(shipping_cost) FROM {$table_cities} WHERE active = %d", 1))),
+            'min_shipping_cost' => floatval($wpdb->get_var($wpdb->prepare("SELECT MIN(shipping_cost) FROM {$table_cities} WHERE active = %d", 1))),
+            'max_shipping_cost' => floatval($wpdb->get_var($wpdb->prepare("SELECT MAX(shipping_cost) FROM {$table_cities} WHERE active = %d", 1)))
         );
     }
     
@@ -775,20 +775,20 @@ class YGB_City_Database {
         
         $all_cleared = true;
         foreach ($tables as $table) {
-            if ($wpdb->get_var("SHOW TABLES LIKE '{$table}'") !== $table) {
+            if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table)) !== $table) {
                 continue;
             }
             
-            $result = $wpdb->query("TRUNCATE TABLE {$table}");
+            $result = $wpdb->query($wpdb->prepare('TRUNCATE TABLE %i', $table));
             if ($result === false) {
-                $result = $wpdb->query("DELETE FROM {$table}");
+                $result = $wpdb->query($wpdb->prepare('DELETE FROM %i', $table));
                 if ($result === false) {
                     $all_cleared = false;
                     if (defined('WP_DEBUG') && WP_DEBUG) {
                         error_log("YGB City: No se pudo limpiar la tabla {$table}");
                     }
                 } else {
-                    $wpdb->query("ALTER TABLE {$table} AUTO_INCREMENT = 1");
+                    $wpdb->query($wpdb->prepare('ALTER TABLE %i AUTO_INCREMENT = 1', $table));
                 }
             }
         }
