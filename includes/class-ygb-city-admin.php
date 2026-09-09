@@ -357,7 +357,7 @@ class YGB_City_Admin {
     private function logs_table_exists() {
         global $wpdb;
         $table_logs = $wpdb->prefix . 'ygb_activity_logs';
-        return $wpdb->get_var("SHOW TABLES LIKE '{$table_logs}'") === $table_logs;
+        return $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table_logs)) === $table_logs;
     }
     
     /**
@@ -386,7 +386,7 @@ class YGB_City_Admin {
         global $wpdb;
         $table_logs = $wpdb->prefix . 'ygb_activity_logs';
         
-        $result = $wpdb->query("TRUNCATE TABLE {$table_logs}");
+        $result = $wpdb->query($wpdb->prepare('TRUNCATE TABLE %i', $table_logs));
         
         if ($result !== false) {
             YGB_City_Database::log_activity('Logs limpiados por usuario ID: ' . get_current_user_id(), 'admin');
